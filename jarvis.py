@@ -1,52 +1,56 @@
-import pyttsx3 #pip install pyttsx3 == it is used to convert text to speech
-import datetime
-engine = pyttsx3.init()
+#The function that lets Jarvis speak
+from speak import speak
+#The frunction that elicits the provess of Jarvis analyzing what is being said (speech recognition)
+from take_command import take_command
+#The function that has Jarvis greet the user
+from wish_me import wish_me
+#The function that has Jarvis tell the time
+from tell_time import tell_time
+#The function that has Jarvis to tell the date
+from tell_date import tell_date
+#The function that lets Jarvis open wikipedia
+from search_wikipedia import search_wikipedia
+#The function that lets Jarvis open a website
+from open_website import open_website
+#The function that lets Jarvis send an email
+from send_email import send_email
+#The function that lets Jarvis do a fgorecast
+from get_weather import get_weather
+#The function that lets Jarvis take a screenshot
+from take_screenshot import take_screenshot
+#The functiuon that has Jarvis say a joke(s)
+from tell_joke import tell_joke
+#The function that stores information of the email's username and password
 
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
-
-def time():
-    Time = datetime.datetime.now().strftime("%I:%M:%S")
-    speak("the current time is")
-    speak(Time)
-
-def date():
-    year = int(datetime.datetime.now().year)
-    month = int(datetime.datetime.now().month)
-    date = int(datetime.datetime.now().day)
-    speak("the current date is:")
-    speak(date)
-    speak(month)
-    speak(year)
-
-def greeting ():
-    hour = datetime.datetime.now().hour
-    if hour >= 6 and hour <12:
-        speak("Good morning, Sir!")
-    elif hour >= 12 and hour <18:
-        speak("Good afternoon Sir!")
-    elif hour >= 18 and hour <24:
-        speak("Good Evening Sir!")
-    else:
-        speak("Good Night Sir!")\
-
-def wishme():
-    speak("Welcome Back Sir")
-    time()
-    date()
-    greeting()
-    speak("Jarvis at your service, please tell me how I can help you?")
-
-def takeCommandCMD():
-    query = input("please tell me how I can help you?\n")
-    return query
-
-if __name__ == "_main_":
-    wishme()
+from email_credentials import EMAIL, PASSWORD
+if __name__ == "__main__":
+    wish_me(speak)
     while True:
-        query = takeCommandCMD().lower()
-        if 'time' in query:
-            time()
-        elif 'date' in query:
-            date()
+        command = take_command()
+        if "time" in command:
+            tell_time(speak)
+        elif "date" in command:
+            tell_date(speak)
+        elif "wikipedia" in command:
+            search_wikipedia(command.replace("wikipedia", ""), speak)
+        elif "open youtube" in command:
+            open_website("youtube")
+        elif "open google" in command:
+            open_website("google")
+        elif "send email" in command:
+            speak("What should I say?")
+            content = take_command()
+            speak("Whom should I send it to?")
+            recipient = input("Enter recipient email: ")  # Input for demo purposes
+            send_email(recipient, content, speak)
+        elif "weather" in command:
+            get_weather(speak)
+        elif "joke" in command:
+            tell_joke(speak)
+        elif "screenshot" in command:
+            take_screenshot(speak)
+        elif "exit" in command:
+            speak("Goodbye!")
+            break
+        else:
+            speak("I'm not sure how to do that yet.")
